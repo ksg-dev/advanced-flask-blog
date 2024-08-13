@@ -8,7 +8,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
+from flask_ckeditor.utils import cleanify
 from datetime import date
+
 
 
 app = Flask(__name__)
@@ -61,9 +63,10 @@ def show_post(post_id):
 # TODO: add_new_post() to create a new blog post
 @app.route("/new-post", methods=["GET", "POST"])
 def add_new_post():
-    form = NewPost
+    form = NewPost()
 
     if request.method == "POST":
+        # data = cleanify(request.form.get('ckeditor'))
         if form.validate_on_submit():
             title = form.title.data.title()
             subtitle = form.subtitle.data
@@ -71,7 +74,17 @@ def add_new_post():
             author = form.author.data.title()
             img_url = form.img_url.data
 
-    return render_template("make-post.html", form = form)
+            post_date = date.today()
+
+            new_post = BlogPost(title, subtitle, body, author, img_url, date=post_date)
+
+            with app.app_context():
+                db.session.add(new_post)
+                db.session.commit()
+
+            return redirect("get_all_posts")
+
+    return render_template("make-post.html", form=form)
 
 # TODO: edit_post() to change an existing blog post
 

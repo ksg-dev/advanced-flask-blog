@@ -4,9 +4,9 @@ from wtforms import StringField, SubmitField
 
 
 class NewPost(FlaskForm):
-    title = StringField('Title')
+    title = StringField('Blog Title')
     subtitle = StringField('Subtitle')
-    body = CKEditorField('Body')
     author = StringField('Author')
     img_url = StringField('Background Image URL')
+    body = CKEditorField('Body')
     submit = SubmitField("Add Post")
