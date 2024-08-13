@@ -60,7 +60,7 @@ def show_post(post_id):
     return render_template("post.html", post=requested_post)
 
 
-# TODO: add_new_post() to create a new blog post
+# Create a new blog post
 @app.route("/new-post", methods=["GET", "POST"])
 def add_new_post():
     form = NewPost()
@@ -74,15 +74,15 @@ def add_new_post():
             author = form.author.data.title()
             img_url = form.img_url.data
 
-            post_date = date.today()
+            post_date = date.today().strftime('%B %d, %Y')
 
-            new_post = BlogPost(title, subtitle, body, author, img_url, date=post_date)
+            new_post = BlogPost(title=title, subtitle=subtitle, body=body, author=author, img_url=img_url, date=post_date)
 
             with app.app_context():
                 db.session.add(new_post)
                 db.session.commit()
 
-            return redirect("get_all_posts")
+            return redirect("/")
 
     return render_template("make-post.html", form=form)
 
