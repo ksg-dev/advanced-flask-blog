@@ -14,6 +14,7 @@ from datetime import date
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
+ckeditor = CKEditor(app)
 
 
 # CREATE DATABASE
@@ -58,11 +59,19 @@ def show_post(post_id):
 
 
 # TODO: add_new_post() to create a new blog post
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/new-post", methods=["GET", "POST"])
 def add_new_post():
     form = NewPost
 
-    if request.method
+    if request.method == "POST":
+        if form.validate_on_submit():
+            title = form.title.data.title()
+            subtitle = form.subtitle.data
+            body = form.body.data
+            author = form.author.data.title()
+            img_url = form.img_url.data
+
+    return render_template("make-post.html", form = form)
 
 # TODO: edit_post() to change an existing blog post
 

@@ -5,6 +5,7 @@
   class="masthead"
   style="background-image: url('../static/assets/img/edit-bg.jpg')"
 >
+
   <div class="container position-relative px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
@@ -25,6 +26,13 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <!-- TODO:-Add CKEditor and render the form here -->
+          {{ ckeditor.load(pkg_type="full") }}
+          {{ ckeditor.config(name='body') }}
+        <form method="post">
+          {{ form.title }}
+          {{ form.body }}
+          {{ form.submit }}
+        </form>
       </div>
     </div>
   </div>
