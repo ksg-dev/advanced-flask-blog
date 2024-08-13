@@ -66,23 +66,21 @@ def add_new_post():
     form = NewPost()
 
     if request.method == "POST":
-        # data = cleanify(request.form.get('ckeditor'))
         if form.validate_on_submit():
-            title = form.title.data.title()
-            subtitle = form.subtitle.data
-            body = form.body.data
-            author = form.author.data.title()
-            img_url = form.img_url.data
-
-            post_date = date.today().strftime('%B %d, %Y')
-
-            new_post = BlogPost(title=title, subtitle=subtitle, body=body, author=author, img_url=img_url, date=post_date)
+            new_post = BlogPost(
+                title=form.title.data.title(),
+                subtitle=form.subtitle.data,
+                body=form.body.data,
+                author=form.author.data.title(),
+                img_url=form.img_url.data,
+                post_date=date.today().strftime('%B %d, %Y')
+            )
 
             with app.app_context():
                 db.session.add(new_post)
                 db.session.commit()
 
-            return redirect("/")
+            return redirect("{{ url_for('get_all_posts') }}")
 
     return render_template("make-post.html", form=form)
 
