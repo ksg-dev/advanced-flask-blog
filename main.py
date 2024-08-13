@@ -84,12 +84,13 @@ def add_new_post():
 
     return render_template("make-post.html", form=form, post_id=None)
 
-# TODO: edit_post() to change an existing blog post
+
+# Change an existing blog post
 @app.route("/edit-post/<post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    # post_id = request.args.get("id")
     post = db.get_or_404(BlogPost, post_id)
     form = NewPost(obj=post)
+    og_date = post.date
 
     if form.validate_on_submit():
         post.title = form.title.data.title()
@@ -97,9 +98,8 @@ def edit_post(post_id):
         post.body = form.body.data
         post.author = form.author.data.title()
         post.img_url = form.img_url.data
-        post.post_date = date.today().strftime('%B %d, %Y')
         db.session.commit()
-        return redirect(url_for("get_all_posts"))
+        return redirect(url_for("show_post", post_id=post_id))
 
     return render_template("make-post.html", form=form, post_id=post_id)
 
